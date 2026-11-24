@@ -1,0 +1,11 @@
+{
+  "display_name": "API 密钥仓库",
+  "loading_order": 21,
+  "requires": [],
+  "optional": [],
+  "js": "index.js?v=021",
+  "css": "style.css?v=021",
+  "author": "Dio",
+  "version": "0.2.1",
+  "homePage": ""
+}
