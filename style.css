@@ -1,7 +1,7 @@
 :root {
-    --akv-bg: color-mix(in srgb, var(--SmartThemeBlurTintColor, #17171c) 88%, #ffffff 12%);
-    --akv-card: color-mix(in srgb, var(--SmartThemeBlurTintColor, #17171c) 72%, #ffffff 28%);
-    --akv-soft: color-mix(in srgb, var(--SmartThemeBlurTintColor, #17171c) 62%, #ffffff 38%);
+    --akv-bg: color-mix(in srgb, var(--SmartThemeBlurTintColor, #17171c) 95%, #ffffff 5%);
+    --akv-card: color-mix(in srgb, var(--SmartThemeBlurTintColor, #17171c) 86%, #ffffff 14%);
+    --akv-soft: color-mix(in srgb, var(--SmartThemeBlurTintColor, #17171c) 80%, #ffffff 20%);
     --akv-text: var(--SmartThemeBodyColor, #f3f1f5);
     --akv-muted: color-mix(in srgb, var(--akv-text) 66%, transparent);
     --akv-border: color-mix(in srgb, var(--SmartThemeBodyColor, #ffffff) 25%, transparent);
@@ -10,6 +10,21 @@
     --akv-danger: #9f344b;
     --akv-good: #256c43;
     --akv-warn: #8a6116;
+}
+
+.akv-sheet[data-akv-theme="dark"] {
+    color-scheme: dark;
+    --akv-bg: #1f1d23;
+    --akv-card: #2b282f;
+    --akv-soft: #39353e;
+    --akv-text: #f3eff3;
+    --akv-muted: rgba(243, 239, 243, .67);
+    --akv-border: rgba(243, 239, 243, .22);
+    --akv-accent: #d778aa;
+    --akv-accent-2: #f0a5c7;
+    --akv-danger: #ef91a2;
+    --akv-good: #79c993;
+    --akv-warn: #e0b86f;
 }
 
 .akv-launcher {
@@ -165,6 +180,11 @@
 .akv-more-button {
     padding-bottom: 8px;
     font-size: 22px;
+}
+
+.akv-theme-button {
+    font-size: 18px;
+    line-height: 1;
 }
 
 .akv-menu-wrap { position: relative; }

@@ -3,9 +3,9 @@
   "loading_order": 21,
   "requires": [],
   "optional": [],
-  "js": "index.js?v=021",
-  "css": "style.css?v=021",
+  "js": "index.js?v=030",
+  "css": "style.css?v=030",
   "author": "Dio",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "homePage": ""
 }

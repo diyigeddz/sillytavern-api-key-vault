@@ -3,6 +3,7 @@
 
     const EXTENSION_ID = 'api-key-vault';
     const STORAGE_KEY = 'sillytavern-api-key-vault-v1';
+    const THEME_KEY = 'sillytavern-api-key-vault-theme';
     const BACKUP_TYPE = 'sillytavern-api-key-vault';
     const URL_SELECTORS = [
         '#custom_api_url_text',
@@ -103,6 +104,22 @@
         }
     }
 
+    function loadTheme() {
+        try {
+            return localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light';
+        } catch {
+            return 'light';
+        }
+    }
+
+    function applyTheme(sheet, button, theme) {
+        const isDark = theme === 'dark';
+        sheet.dataset.akvTheme = isDark ? 'dark' : 'light';
+        button.textContent = isDark ? '☀' : '☾';
+        button.title = isDark ? '切换到日间模式' : '切换到夜间模式';
+        button.setAttribute('aria-label', button.title);
+    }
+
     function createElement(tag, className, text) {
         const element = document.createElement(tag);
         if (className) element.className = className;
@@ -149,6 +166,8 @@
 
         const headerActions = createElement('div', 'akv-header-actions');
         const addChannelButton = makeButton('＋', '新建渠道', 'akv-icon-button akv-primary-icon');
+        const themeButton = makeButton('☾', '切换到夜间模式', 'akv-icon-button akv-theme-button');
+        applyTheme(sheet, themeButton, loadTheme());
         const menuWrap = createElement('div', 'akv-menu-wrap');
         const menuButton = makeButton('⋯', '更多操作', 'akv-icon-button akv-more-button');
         const menu = createElement('div', 'akv-menu');
@@ -159,7 +178,7 @@
         menu.append(refreshAllButton, importButton, exportButton);
         menuWrap.append(menuButton, menu);
         const closeButton = makeButton('×', '关闭', 'akv-icon-button');
-        headerActions.append(addChannelButton, menuWrap, closeButton);
+        headerActions.append(addChannelButton, themeButton, menuWrap, closeButton);
         header.append(titleWrap, headerActions);
 
         const toolbar = createElement('div', 'akv-toolbar');
@@ -292,6 +311,15 @@
             if (!event.target.closest('.akv-menu-wrap')) menu.hidden = true;
         });
         addChannelButton.addEventListener('click', () => openChannelEditor());
+        themeButton.addEventListener('click', () => {
+            const theme = sheet.dataset.akvTheme === 'dark' ? 'light' : 'dark';
+            try {
+                localStorage.setItem(THEME_KEY, theme);
+            } catch {
+                // 仍然允许当前会话切换主题。
+            }
+            applyTheme(sheet, themeButton, theme);
+        });
         menuButton.addEventListener('click', event => {
             event.stopPropagation();
             menu.hidden = !menu.hidden;
@@ -1139,7 +1167,7 @@
             launcherTimer = setTimeout(ensureLauncher, 120);
         });
         launcherObserver.observe(document.body, { childList: true, subtree: true });
-        console.info(`[${EXTENSION_ID}] ready v0.2.1`);
+        console.info(`[${EXTENSION_ID}] ready v0.3.0`);
     }
 
     if (document.readyState === 'loading') {
