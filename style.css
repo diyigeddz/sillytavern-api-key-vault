@@ -420,6 +420,43 @@
 
 .akv-channel-body[hidden] { display: none; }
 
+.akv-channel-url-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px;
+    margin-bottom: 7px;
+}
+
+.akv-channel-url-value {
+    min-width: 0;
+    height: 34px;
+    box-sizing: border-box;
+    padding: 0 9px;
+    overflow: hidden;
+    border: 1px solid var(--akv-border);
+    border-radius: 9px;
+    outline: none;
+    color: color-mix(in srgb, var(--akv-text) 78%, transparent);
+    background: rgba(0, 0, 0, .06);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 10px;
+    text-overflow: ellipsis;
+}
+
+.akv-channel-url-value:focus {
+    border-color: color-mix(in srgb, var(--akv-accent) 75%, white 10%);
+    box-shadow: 0 0 0 2px rgba(216, 120, 166, .13);
+}
+
+.akv-url-fill {
+    min-width: 78px;
+    height: 34px;
+    padding: 0 10px;
+    border-color: color-mix(in srgb, var(--akv-accent) 48%, var(--akv-border));
+    color: color-mix(in srgb, var(--akv-accent) 78%, var(--akv-text) 22%);
+    background: color-mix(in srgb, var(--akv-accent) 12%, transparent);
+}
+
 .akv-manage-toggle {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;

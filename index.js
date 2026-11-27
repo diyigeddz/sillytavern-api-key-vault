@@ -616,6 +616,16 @@
 
         const body = createElement('div', 'akv-channel-body');
         body.hidden = !isExpanded;
+        const urlRow = createElement('div', 'akv-channel-url-row');
+        const urlValue = document.createElement('input');
+        urlValue.type = 'text';
+        urlValue.className = 'akv-channel-url-value';
+        urlValue.value = channel.url;
+        urlValue.readOnly = true;
+        urlValue.spellcheck = false;
+        urlValue.setAttribute('aria-label', `${channel.name} URL`);
+        const fillUrlButton = makeButton('插入 URL', '只填入酒馆 URL 输入框', 'akv-button akv-url-fill');
+        urlRow.append(urlValue, fillUrlButton);
         const manageOpen = expandedChannelManageIds.has(channel.id);
         const manageToggle = makeButton('', '展开渠道管理', 'akv-manage-toggle');
         manageToggle.setAttribute('aria-expanded', String(manageOpen));
@@ -645,10 +655,12 @@
             keyList.appendChild(createElement('div', 'akv-no-keys', '这个渠道还没有 Key'));
         }
 
-        body.append(manageToggle, managePanel, keysHeader, keyList);
+        body.append(urlRow, manageToggle, managePanel, keysHeader, keyList);
         card.append(summary, body);
 
         summary.addEventListener('click', () => toggleChannel(card, channel.id));
+        urlValue.addEventListener('click', () => urlValue.select());
+        fillUrlButton.addEventListener('click', () => fillUrlIntoSillyTavern(channel));
         manageToggle.addEventListener('click', () => {
             const open = managePanel.hidden;
             managePanel.hidden = !open;
@@ -738,7 +750,7 @@
         const notes = key.notes ? createElement('div', 'akv-key-notes', key.notes) : null;
         const actions = createElement('div', 'akv-key-actions');
         const readBalanceButton = makeButton('读取额度', '读取这把 Key 的额度', 'akv-key-action akv-key-balance');
-        const fill = makeButton('填入', '填入酒馆 URL 与密钥框', 'akv-key-action akv-fill');
+        const fill = makeButton('插入 Key', '只填入酒馆密钥输入框', 'akv-key-action akv-fill');
         const copy = makeButton('复制', '复制到系统剪贴板', 'akv-key-action');
         const edit = makeButton('编辑', '编辑 Key', 'akv-key-action');
         const toggle = makeButton(key.status === 'invalid' ? '恢复' : '失效', key.status === 'invalid' ? '恢复 Key' : '标记 Key 失效', 'akv-key-action');
@@ -760,7 +772,7 @@
             else expandedKeyActionIds.delete(key.id);
         });
         readBalanceButton.addEventListener('click', () => void readBalance(channel.id, key.id));
-        fill.addEventListener('click', () => fillIntoSillyTavern(channel, key));
+        fill.addEventListener('click', () => fillKeyIntoSillyTavern(channel, key));
         copy.addEventListener('click', () => void copyText(key.value));
         edit.addEventListener('click', () => openKeyEditor(channel, key));
         toggle.addEventListener('click', () => toggleKeyStatus(channel, key));
@@ -862,18 +874,24 @@
         toast('Key 已删除');
     }
 
-    function fillIntoSillyTavern(channel, key) {
+    function fillUrlIntoSillyTavern(channel) {
         const urlInput = findPageInput(URL_SELECTORS, /自定义端点|Custom Endpoint|Base URL/i);
-        const keyInput = findPageInput(KEY_SELECTORS, /自定义 API 密钥|Custom API Key/i);
-        if (!urlInput || !keyInput) {
-            toast('没有找到酒馆的 URL 或密钥输入框', 'error');
+        if (!urlInput) {
+            toast('没有找到酒馆的 URL 输入框', 'error');
             return;
         }
         setInputValue(urlInput, channel.url);
+        toast(`已插入 ${channel.name} 的 URL`);
+    }
+
+    function fillKeyIntoSillyTavern(channel, key) {
+        const keyInput = findPageInput(KEY_SELECTORS, /自定义 API 密钥|Custom API Key/i);
+        if (!keyInput) {
+            toast('没有找到酒馆的密钥输入框', 'error');
+            return;
+        }
         setInputValue(keyInput, key.value);
-        closeVault();
-        keyInput.focus();
-        toast(`已填入 ${channel.name} · ${key.name}`);
+        toast(`已插入 ${channel.name} · ${key.name}`);
     }
 
     function setInputValue(input, value) {
@@ -1167,7 +1185,7 @@
             launcherTimer = setTimeout(ensureLauncher, 120);
         });
         launcherObserver.observe(document.body, { childList: true, subtree: true });
-        console.info(`[${EXTENSION_ID}] ready v0.3.0`);
+        console.info(`[${EXTENSION_ID}] ready v0.3.1`);
     }
 
     if (document.readyState === 'loading') {
